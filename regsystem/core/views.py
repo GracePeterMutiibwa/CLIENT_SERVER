@@ -261,7 +261,7 @@ def submitMessageItem(request):
     messageReceivers = messageData['receiver']
 
     # save
-    RegistrationTools().recordNewMessage(userTag=userTag, messageData=messageContents, messageReceivers=messageReceivers)
+    RegistrationTools().recordNewMessage(userTag=userTag, attachedUser=request.user, messageData=messageContents, messageReceivers=messageReceivers)
 
     if isAdmin:
         messages.success(request, "Your message was forwaded successfully")

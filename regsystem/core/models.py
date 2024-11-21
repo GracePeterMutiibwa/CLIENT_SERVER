@@ -58,4 +58,6 @@ class MessageItem(models.Model):
 
     messageReceivers = models.TextField()
 
+    sendingUser = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='my_messages', blank=True)
+
 

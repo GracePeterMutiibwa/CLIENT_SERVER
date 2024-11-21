@@ -227,12 +227,13 @@ class RegistrationTools:
 
         return
 
-    def recordNewMessage(self, userTag:str, messageData:str, messageReceivers:str):
+    def recordNewMessage(self, userTag:str, attachedUser:User, messageData:str, messageReceivers:str):
         # write
         newMessage = MessageItem.objects.create(
             senderTag=userTag,
             messageContents=messageData,
-            messageReceivers=messageReceivers
+            messageReceivers=messageReceivers,
+            sendingUser=attachedUser
         )
 
         newMessage.save()
@@ -386,7 +387,9 @@ class RegistrationTools:
         getQuery = Q(messageReceivers=studentFaculty) & ~Q(senderTag='admin')
 
         # extract matching messages
-        matchingMessages = MessageItem.objects.filter(getQuery).order_by('sentDate')
+        matchingMessages = MessageItem.objects.filter(getQuery).order_by('sentDate').all()
+
+        # print(len(matchingMessages))
 
         formattedMessages = [self.formatMessageItem(messageInstance=eachMessage, mainReference=studentId) for eachMessage in matchingMessages]
 
