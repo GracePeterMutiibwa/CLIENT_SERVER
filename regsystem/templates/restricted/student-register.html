@@ -1,0 +1,181 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+  Student Register
+{% endblock %}
+
+{% block page_content %}
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="d-flex justify-content-start">
+        <a href="{% url 'reg:manager' %}" class="btn btn-light"><i class="bi-chevron-left me-1"></i>Back</a>
+      </div>
+    </div>
+  </div>
+
+  <form class="row" action="{% url 'reg:add-student' %}" method="post">
+    {% csrf_token %}
+
+    <div class="col-12 justify-content-center mb-5">
+      <div class="card">
+        <div class="card-header">Personal details</div>
+
+        <div class="card-body">
+          <div class="mb-4">
+            <label for="student-name-input" class="form-label">Student Name</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-person"></i>
+              </div>
+              <input type="text" value="{{ data.name }}" name="name" class="form-control" id="student-name-input" placeholder="Type here full names" required />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="student-email-input" class="form-label">Personal Email</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-envelope"></i>
+              </div>
+
+              <input type="text" value="{{ data.email }}" name="email" class="form-control" id="student-email-input" placeholder="Email of the enrolling student" required />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="student-phone-input" class="form-label">Telephone Contact</label>
+
+            <div class="input-group">
+              <div class="input-group-text">+256</div>
+
+              <input type="number" value="{{ data.contact }}" name="contact" class="form-control" id="student-phone-input" placeholder="752635263" required />
+            </div>
+
+            <span class="form-text">Ignore the <strong>0</strong> on the number</span>
+          </div>
+
+          <div class="mb-4">
+            <label for="student-regno-input" class="form-label">Given Registration Number</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-calendar"></i>
+              </div>
+
+              <input type="text" value="{{ data.regno }}" name="regno" class="form-control" id="student-regno-input" placeholder="Year Of Entry/Programme/ID/Private Or Govt" required />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 justify-content-center mb-5">
+      <div class="card">
+        <div class="card-header">Course Information</div>
+
+        <div class="card-body">
+          <div class="mb-4">
+            <label for="student-faculty-input" class="form-label">Faculty</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-building-fill-check"></i>
+              </div>
+              <select value="{{ data.faculty }}" name="faculty" id="student-faculty-input" class="form-select">
+                <option value="COMPUTING & INFORMATICS">COMPUTING & INFORMATICS</option>
+                <option value="BUSINESS STUDIES">BUSINESS STUDIES</option>
+                <option value="APPLIED SCIENCES">APPLIED SCIENCES</option>
+                <option value="MEDICINE & SURGERY">MEDICINE & SURGERY</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="student-programme-input" class="form-label">PROGRAMME</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-check-circle-fill"></i>
+              </div>
+
+              <select value="{{ data.program }}" name="programme" id="student-programme-input" class="form-select">
+                <option value="BACHELOR OF SOFTWARE ENGINEERING">BACHELOR OF SOFTWARE ENGINEERING</option>
+                <option value="BACHELOR OF COMPUTER SCIENCE">BACHELOR OF COMPUTER SCIENCE</option>
+                <option value="BACHELOR OF INFORMATION TECHNOLOGY">BACHELOR OF INFORMATION TECHNOLOGY</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <label for="campus-area-input" class="form-label">CAMPUS</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-map"></i>
+              </div>
+
+              <select value="{{ data.campus }}" name="campus-area" id="campus-area-input" class="form-select">
+                <option value="TOWN CAMPUS">TOWN CAMPUS</option>
+                <option value="KIHUMURO CAMPUS">KIHUMURO CAMPUS</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 justify-content-center mb-5">
+      <div class="card">
+        <div class="card-header">Hostel Allocation</div>
+
+        <div class="card-body">
+          <div class="mb-4">
+            <label for="accomodation-type-input" class="form-label">CATEGORY</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-building"></i>
+              </div>
+              <select value="{{ data.category }}" id="accomodation-type-input" class="form-select">
+                <option value="HALLS">HALLS</option>
+                <option value="RENTAL">PRIVATE</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <label for="allocated-accomodation-input" class="form-label">ACCOMODATION</label>
+
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="bi-map-fill"></i>
+              </div>
+
+              <select value="{{ data.accomodation }}" name="accomodation" id="allocated-accomodation-input" class="form-select">
+                <option value="GENTS FLAT TOWN CAMPUS">GENTS FLAT TOWN CAMPUS</option>
+                <option value="LADIES FLAT TOWN CAMPUS">LADIES FLAT TOWN CAMPUS</option>
+                <option value="GENTS FLAT KIHUMURO CAMPUS">GENTS FLAT KIHUMURO CAMPUS</option>
+                <option value="LADIES FLAT KIHUMURO CAMPUS">LADIES FLAT KIHUMURO CAMPUS</option>
+                <option value="PRIVATE RESIDENCE">PRIVATE</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" name="tag" value="{{ save }}" />
+
+    <div class="col-12 d-flex justify-content-end">
+      <button class="btn btn-{{ color }} text-white" type="submit"><i class="bi-check-circle-fill me-1"></i>{{ text }}</button>
+    </div>
+  </form>
+{% endblock %}
+
+{% block page_js %}
+
+{% endblock %}

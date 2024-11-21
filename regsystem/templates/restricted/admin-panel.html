@@ -1,0 +1,171 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+  Admin Panel
+{% endblock %}
+
+{% block page_content %}
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-start">
+        <a href="{% url 'reg:logout' %}" class="btn btn-secondary"><i class="bi-lock me-1"></i>Logout</a>
+      </div>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+      <img width="100px" src="{% static 'assets/images/admin-image.png' %}" class="img-fluid" />
+    </div>
+
+    <div class="col-12 d-flex justify-content-center mb-3">
+      <h5 class="text-wrap">Welcome Admin</h5>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 justify-content-center mb-5">
+      <div class="card">
+        <div class="card-header d-flex justify-content-end">
+          <a href="{% url 'reg:register' %}" class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i>Add</a>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">Registered Students</h5>
+
+          {% if info %}
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">REG. NO</th>
+                    <th scope="col">MANAGE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for eachStudent in info %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+
+                      <td>{{ eachStudent.name }}</td>
+
+                      <td>{{ eachStudent.regno }}</td>
+
+                      <td>
+                        <button data-student-tag="{{ eachStudent.id }}" data-student-meta="{{ eachStudent.details }}" class="btn btn-light view-button" data-bs-toggle="offcanvas" data-bs-target="#details-offcanvas"><i class="bi-info me-1"></i> View</button>
+
+                        <a href="{% url 'reg:wipe-student' eachStudent.id %}"><i class="bi bi-trash-fill ms-1"></i></a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="d-flex justify-content-center">
+              <div class="p-5">No students registered yet</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 justify-content-center">
+      <div class="card">
+        <div class="card-header d-flex justify-content-end">
+          <button type="button" data-bs-toggle="offcanvas" data-bs-target="#message-offcanvas" class="btn btn-info text-white"><i class="bi bi-envelope-plus-fill me-1"></i> New</button>
+        </div>
+
+        <div class="card-body">
+          {% if my_messages %}
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">DATE</th>
+                    <th scope="col">MESSAGE</th>
+                    <th scope="col">RECEIVER</th>
+                    <th scope="col">MANAGE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for eachMessage in my_messages %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+
+                      <td>{{ eachMessage.stamp }}</td>
+
+                      <td>{{ eachMessage.message }}</td>
+
+                      <td>{{ eachMessage.receivers }}</td>
+
+                      <td>
+                        <a href="{% url 'reg:wipe-message' eachMessage.id %}" class="btn btn-danger"><i class="bi-trash me-1"></i> Delete</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="d-flex justify-content-center">
+              <div class="p-4">No messages sent yet</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="message-offcanvas">
+    <div class="offcanvas-header border-bottom">
+      <h5 id="offcanvasRightLabel">Messenger</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <form action="{% url 'reg:send-message' %}" class="offcanvas-body" method="post">
+      {% csrf_token %}
+
+      <div class="mb-4">
+        <label for="message-receivers" class="form-label">Receivers</label>
+
+        <select name="receiver" id="message-receivers" class="form-select" required>
+          <option value="">--Choose Group--</option>
+          {% if info %}
+            <option value="ALL">ALL</option>
+            <option value="COMPUTING & INFORMATICS">COMPUTING & INFORMATICS</option>
+            <option value="BUSINESS STUDIES">BUSINESS STUDIES</option>
+            <option value="APPLIED SCIENCES">APPLIED SCIENCES</option>
+            <option value="MEDICINE & SURGERY">MEDICINE & SURGERY</option>
+          {% endif %}
+        </select>
+      </div>
+
+      <textarea name="message" placeholder="Type here message to send" id="message-area-input" class="form-control mb-3" rows="10" required></textarea>
+
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-success"><i class="bi bi-send-check-fill me-1"></i>Send</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="details-offcanvas">
+    <div class="offcanvas-header border-bottom">
+      <h5 id="offcanvasRightLabel">Student Details</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <textarea class="form-control mb-3" rows="17" id="student-details-area" readonly></textarea>
+
+      <div class="d-flex justify-content-end">
+        <a href="#" id="trigger-edit-button" class="btn btn-primary"><i class="bi-pen me-1"></i>Edit</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block page_js %}
+  <script src="{% static 'assets/js/admin-tasks.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+  Student Information
+{% endblock %}
+
+{% block page_content %}
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-start">
+        <a href="{% url 'reg:logout' %}" class="btn btn-secondary"><i class="bi-lock me-1"></i>Logout</a>
+      </div>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+      <img width="150px" src="{% static 'assets/images/student-with-laptop.png' %}" class="img-fluid rounded-circle" />
+    </div>
+
+    <div class="col-12 d-flex justify-content-center mb-4">
+      <h5 class="text-wrap">{{ info.name }}</h5>
+    </div>
+
+    <div class="col-12 mb-5">
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-bell-fill me-1"></i> Notifications
+        </div>
+
+        <div class="card-body" style="max-height: 15rem; overflow-y: scroll;">
+          {% if news_group %}
+            <div class="row">
+              {% for eachNewsFeed in news_group %}
+                <div class="col-12 d-flex justify-content-start mb-4">
+                  <div class="card w-100">
+                    <div class="card-header">
+                      <span class="card-text">Administrator</span>
+                    </div>
+                    <div class="card-body bg-dark">
+                      <div class="d-flex justify-content-start text-white">{{ eachNewsFeed.message }}</div>
+
+                      <div class="d-flex justify-content-end">
+                        <span class="card-text text-white">{{ eachNewsFeed.date }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="d-flex justify-content-center">
+              <div class="p-4">No administrator messages yet</div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="card-footer">
+          <div class="card-text">These are messages from the administrators</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-chat-left-quote-fill me-1"></i>
+          Class Chat
+        </div>
+
+        <div class="card-body" style="max-height: 15rem; overflow-y: scroll;">
+          <div class="row" id="message-list-area">
+            {% if our_group %}
+              {% for eachGroupMessage in our_group %}
+                <div class="col-12 d-flex justify-content-{{ eachGroupMessage.align }} mb-4">
+                  <div class="card">
+                    <div class="card-body bg-{{ eachGroupMessage.color }}">
+                      <div class="d-flex justify-content-start">{{ eachGroupMessage.name }}</div>
+
+                      <span class="text-white">{{ eachGroupMessage.message }}</span>
+
+                      <div class="d-flex justify-content-end">
+                        <span class="card-text text-muted">{{ eachGroupMessage.stamp }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="col-12 d-flex justify-content-center">
+                <div class="p-4">No administrator messages yet</div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <form action="{% url 'reg:send-message' %}" class="card-footer" method="post">
+          {% csrf_token %}
+
+          <div class="d-md-flex">
+            <input type="text" name="message" id="message-input" class="form-control me-md-3 me-0 mb-3 mb-md-0" placeholder="Type message here" required />
+
+            <input type="hidden" name="tag" value="{{ id_tag }}" />
+
+            <input type="hidden" name="receiver" value="{{ receivers }}" />
+
+            <button type="submit" id="message-send" class="btn btn-success"><i class="bi bi-send"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block page_js %}
+  {% comment %} <script src="{% static 'assets/js/messages.js' %}"></script> {% endcomment %}
+{% endblock %}
